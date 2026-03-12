@@ -1,0 +1,44 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load dataset
+df = pd.read_csv("../data/dmart_dataset.csv")
+
+# Display first rows
+print(df.head())
+
+# Data cleaning
+df = df.dropna()
+
+# Top selling products
+top_products = df.groupby('Product')['Quantity'].sum().sort_values(ascending=False).head(10)
+
+plt.figure(figsize=(10,5))
+top_products.plot(kind='bar')
+plt.title("Top Selling Products")
+plt.xlabel("Product")
+plt.ylabel("Quantity Sold")
+plt.xticks(rotation=45)
+plt.show()
+
+# Sales by category
+category_sales = df.groupby('Category')['Price'].sum()
+
+plt.figure(figsize=(8,5))
+category_sales.plot(kind='bar')
+plt.title("Sales by Category")
+plt.xlabel("Category")
+plt.ylabel("Total Sales")
+plt.show()
+
+# Monthly sales trend
+df['Date'] = pd.to_datetime(df['Date'])
+monthly_sales = df.groupby(df['Date'].dt.month)['Price'].sum()
+
+plt.figure(figsize=(8,5))
+monthly_sales.plot(marker='o')
+plt.title("Monthly Sales Trend")
+plt.xlabel("Month")
+plt.ylabel("Total Sales")
+plt.show()
